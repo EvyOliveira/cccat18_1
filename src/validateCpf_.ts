@@ -1,13 +1,13 @@
-export function validateCpf (str: string) {
-	if (str !== null) {
-		if (str !== undefined) {
-			if (str.length >= 11 && str.length <= 14){
-				str=str
+export function validateCpf (cpf: string) {
+	if (cpf !== null) {
+		if (cpf !== undefined) {
+			if (cpf.length >= 11 && cpf.length <= 14){
+				cpf=cpf
 					.replace('.','')
 					.replace('.','')
 					.replace('-','')
 					.replace(" ","");  
-				if (!str.split("").every(c => c === str[0])) {
+				if (!cpf.split("").every(c => c === cpf[0])) {
 					try{  
 						let     d1, d2;  
 						let     dg1, dg2, rest;  
@@ -15,8 +15,8 @@ export function validateCpf (str: string) {
 							let     nDigResult;  
 						d1 = d2 = 0;  
 						dg1 = dg2 = rest = 0;  
-						for (let nCount = 1; nCount < str.length -1; nCount++) {  
-								digito = parseInt(str.substring(nCount -1, nCount));  							
+						for (let nCount = 1; nCount < cpf.length -1; nCount++) {  
+								digito = parseInt(cpf.substring(nCount -1, nCount));  							
 								d1 = d1 + ( 11 - nCount ) * digito;  
 								d2 = d2 + ( 12 - nCount ) * digito;  
 						};  	
@@ -28,7 +28,7 @@ export function validateCpf (str: string) {
 							dg2 = 0;  
 						else  
 							dg2 = 11 - rest;  
-							let nDigVerific = str.substring(str.length-2, str.length);  
+							let nDigVerific = cpf.substring(cpf.length-2, cpf.length);  
 						nDigResult = "" + dg1 + "" + dg2;  
 						return nDigVerific == nDigResult;	
 					}catch (e){  
