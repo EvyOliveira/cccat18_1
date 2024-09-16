@@ -58,3 +58,5 @@ export function validateCpf (str: string) {
 		} else return false;
 	} else return false;
 }
+console.log(validateCpf("97456321558"));
+console.log(validateCpf("12345678910"));
