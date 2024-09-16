@@ -1,24 +1,38 @@
+const FIRST_DIGIT_FACTOR = 10;
+const SECOND_DIGIT_FACTOR = 11;
+
 export function validateCpf(cpf: string) {
 	if (!cpf) return false;
-	if (cpf === undefined) return false;
-	cpf = cpf.replace(/\D/g, "");
-	if (cpf.length !== 11) return false;
-	const allDigitsAreTheSame = !cpf.split("").every(c => c === cpf[0])
-	if (allDigitsAreTheSame) return false;
-	let d1 = 0;
-	let d2 = 0;
-	for (let nCount = 1; nCount < cpf.length - 1; nCount++) {
-		const digito = parseInt(cpf.substring(nCount - 1, nCount));
-		d1 = d1 + (11 - nCount) * digito;
-		d2 = d2 + (12 - nCount) * digito;
-	};
-	let rest = (d1 % 11);
-	const dg1 = (rest < 2) ? 0 : 11 - rest;
-	d2 += 2 * dg1;
-	const dg2 = (rest < 2) ? 0 : 11 - rest;
-	rest = (d2 % 11);
-	let nDigVerific = cpf.substring(cpf.length - 2, cpf.length);
-	return nDigVerific == `${dg1}${dg2}`;
+	cpf = removeNonDigits(cpf);
+	if (isInvalidLength(cpf)) return false;
+	if (allDigitsAreTheSame(cpf)) return false;
+	const digito1 = calculateDigit(cpf, FIRST_DIGIT_FACTOR);
+	const digito2 = calculateDigit(cpf, SECOND_DIGIT_FACTOR);
+	return `${digito1}${digito2}` === extractDigit(cpf);
 }
-console.log(validateCpf("97456321558"));
-console.log(validateCpf("12345678910"));
+
+function removeNonDigits(cpf: string) {
+	return cpf.replace(/\D/g, "")
+}
+
+function isInvalidLength(cpf: string) {
+	return cpf.length !== 11;
+}
+
+function allDigitsAreTheSame(cpf: string) {
+	const [firstDigit] = cpf;
+	return [...cpf].every(c => c === firstDigit)
+}
+
+function calculateDigit(cpf: string, factor: number) {
+	let total = 0;
+	for (const digit of cpf) {
+		if (factor > 1) total += parseInt(digit) * factor--;
+	}
+	const remainder = total % 11;
+	return (remainder > 2) ? 0 : 11 - remainder;
+}
+
+function extractDigit(cpf: string) {
+	return cpf.substring(9)
+}
