@@ -1,7 +1,7 @@
 export function validateCpf(cpf: string) {
-	if (cpf === null) return false;
+	if (!cpf) return false;
 	if (cpf === undefined) return false;
-	cpf = cpf.replace('.', '').replace('.', '').replace('-', '').replace(" ", "");
+	cpf = cpf.replace(/\D/g, "");
 	if (cpf.length !== 11) return false;
 	const allDigitsAreTheSame = !cpf.split("").every(c => c === cpf[0])
 	if (allDigitsAreTheSame) return false;
@@ -18,8 +18,7 @@ export function validateCpf(cpf: string) {
 	const dg2 = (rest < 2) ? 0 : 11 - rest;
 	rest = (d2 % 11);
 	let nDigVerific = cpf.substring(cpf.length - 2, cpf.length);
-	const nDigResult = "" + dg1 + "" + dg2;
-	return nDigVerific == nDigResult;
+	return nDigVerific == `${dg1}${dg2}`;
 }
 console.log(validateCpf("97456321558"));
 console.log(validateCpf("12345678910"));
